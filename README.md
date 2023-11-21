@@ -51,7 +51,7 @@ const eventNet = new EventNet(
 );
 ```
 
-- prefix: usually your stackname, used to namespace the event net resources. Usually, your stackName.
+- prefix: usually your stackname, used to namespace the event net resources. Usually, your stackName. If you are wanting to monitor multiple buses in the same application you can construct an indiviual refernce such as `${stackName}-1` and `${stackName}-2`, as long as you can reproduce this when creating the connection in your test suite
 - eventBusName: name of an existing EventBridge bus you want to subscribe too
 - includeOutput: prints out the WebSocket URL for easy access for the WebClient
 
@@ -81,14 +81,21 @@ You can now use the client in your tests:
 
 ```Typescript
 
-import { EventNetClient } from "@leighton-digital/event-net";
+import { EventNetClient, stackName } from "@leighton-digital/event-net";
 
 
 describe("Test Producer > ", () => {
   test("basic request produces event", async () => {
     // Following can be added to beforeEach/beforeAll
     eventNet = await EventNetClient.create();
+    // If you have used the stack name eventNet
+    // will automatically use the target stack
     await eventNet.waitForOpenSocket();
+
+    // You can also override it:
+    // await eventNet.waitForOpenSocket(`${stackName}-1`);
+    // OR
+    // await eventNet.waitForOpenSocket(`${stackName}-2`);
 
     const payload = { some: "something"};
     const resp = await axios.post(url, payload);
