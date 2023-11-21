@@ -2,7 +2,7 @@
 
 # EventNet
 
-A number of tools for working with AWS EventBridge and the events published through it.
+Several tools for working with AWS EventBridge and the events published through it.
 
 ## CDK Event Extension
 
@@ -12,7 +12,7 @@ A CDK construct that allows you to connect a WebSocket to an EventBridge instanc
 
 ### Event Producers - Perform and Action and Collect Events
 
-The Test Client connects to the WebSocket and collects the events for Jest tests.
+The Test Client connects to the WebSocket and collects the events for Jest assertions.
 
 ### Event Consumers - Validating and Sending Events
 
@@ -51,7 +51,7 @@ const eventNet = new EventNet(
 );
 ```
 
-- **prefix**: usually your stackname, used to namespace the event net resources. Usually, your stackName. If you are wanting to monitor multiple buses in the same application you can construct an indiviual refernce such as `${stackName}-1` and `${stackName}-2`, as long as you can reproduce this when creating the connection in your test suite
+- **prefix**: usually your stackname, used to namespace the event net resources. Usually, your stackName. If you want to monitor multiple buses in the same application, you can construct an individual reference such as `${stackName}-1` and `${stackName}-2`, as long as you can reproduce this when creating the connection in your test suite
 - **eventBusName**: name of an existing EventBridge bus you want to subscribe too
 - **includeOutput**: prints out the WebSocket URL for easy access for the WebClient
 
@@ -69,13 +69,13 @@ const eventNet = new EventNet(
 import { EventNetClient } from "@leighton-digital/event-net";
 ```
 
-The EventNet client expects your `prefix` from the CDK construct to be passed in as `'--stack=my-service-dev'`. This corresponds to the Cloud Formation stack name produced by CDK. i.e:
+The EventNet client expects your `prefix` from the CDK construct to be passed in as `'--stack=my-service-dev'`. This corresponds to the Cloud Formation stack name produced by CDK. i.e.:
 
 `yarn test:int --stack=my-stack-name-dev --all --runInBand`
 
-_Why did we choose this?_ Because we also use [sls-test-tools](https://github.com/aleios-cloud/sls-test-tools) heavily in our test suites, and we didn't want to create another mechanism for bootstrapping our test suite.
+_Why did we choose this?_ Because we also heavily use [sls-test-tools](https://github.com/aleios-cloud/sls-test-tools) in our test suites, we didn't want to create another mechanism for bootstrapping our test suite.
 
-You can now use the client in your tests:
+If you are using multiple Event Buses, we strongly recommend basing the names from the stackName as it is easier to reproduce.
 
 ### Event Producer Example - Perform Action and Collect Events
 
@@ -144,9 +144,9 @@ describe("Test Consumer > ", () => {
     const sendEvents = await eventNet.validateAndSendEvent(Event, EventSpec)
     await eventNet.waitForClosedSocket()
 
-    // Check in DynamoDb Table that event has been stored
+    // Check in DynamoDb Table that events have been stored in
     // ...
-    // Follwing can be added to afterEach/afterAll
+    // Following can be added to afterEach/afterAll
     await eventNet.closeClient();
 
   });
@@ -157,19 +157,19 @@ describe("Test Consumer > ", () => {
 
 ## Using the Jest Schema Matcher
 
-When installed the Jest JSONschema matcher will be available to use.
+When installed, the Jest JSONschema matcher will be available to use.
 
 ```Typescript
 import * as EventSpec from "../../jsonSpecs/someSchema-v1.json";
 ```
 
-Importantly, this can be from a shared/published NPM module
+Importantly, this can be from a shared/published NPM module.
 
 ```Typescript
 import * as EventSpec from "../../node_modules/@something/event-catalogue/events/orderCreated/someSchema-v1.json";
 ```
 
-Then use the schema to assert against a captured event.
+Then, use the schema to assert against a captured event.
 
 ```Typescript
 expect(singleMessage).toMatchJsonSchema(EventSpec);
@@ -187,15 +187,15 @@ eventNet start
 
 This will open a web client on url: http://localhost:3000
 
-From the output in CDK you will have a WebSocket URL.
+From the output in CDK, you will have a WebSocket URL.
 
 ```
 wss://xxxxx.execute-api.eu-west-2.amazonaws.com/dev
 ```
 
-You need to paste it into `eventnet` client and press connect
+You need to paste it into `eventnet` client and press connect.
 
-Once connected we are ready to inspect events, save them locally or copy/paste them into your IDE.
+Once connected, we can inspect events, save them locally or copy/paste them into your IDE.
 
 ---
 
