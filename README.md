@@ -51,19 +51,19 @@ const eventNet = new EventNet(
 );
 ```
 
-- prefix: usually your stackname, used to namespace the event net resources. Usually, your stackName. If you are wanting to monitor multiple buses in the same application you can construct an indiviual refernce such as `${stackName}-1` and `${stackName}-2`, as long as you can reproduce this when creating the connection in your test suite
-- eventBusName: name of an existing EventBridge bus you want to subscribe too
-- includeOutput: prints out the WebSocket URL for easy access for the WebClient
+- **prefix**: usually your stackname, used to namespace the event net resources. Usually, your stackName. If you are wanting to monitor multiple buses in the same application you can construct an indiviual refernce such as `${stackName}-1` and `${stackName}-2`, as long as you can reproduce this when creating the connection in your test suite
+- **eventBusName**: name of an existing EventBridge bus you want to subscribe too
+- **includeOutput**: prints out the WebSocket URL for easy access for the WebClient
 
 ---
 
 ## Using the Test Client
 
-For testing Event Producers, you will want to perform an action that will trigger your application to generate an event. For instance, writing a record to the DynamoDb table.
+- For testing **Event Producers**, you will want to perform an action that will trigger your application to generate an event. For instance, writing a record to the DynamoDb table.
 
-The test harness then collects all events produced and sends them to a web socket connection.
+- The test harness then collects all events produced and sends them to a web socket connection.
 
-The Test Client to receive events from the WebSocket.
+- The Test Client collects the events from the WebSocket.
 
 ```Typescript
 import { EventNetClient } from "@leighton-digital/event-net";
