@@ -111,7 +111,7 @@ describe("Test Producer > ", () => {
     await eventNet.waitForClosedSocket()
 
     expect(resp.data.body).toBeDefined();
-    expect(events).toHaveLength(1);
+    expect(events).toHaveLength(2);
 
     // Following can be added to afterEach/afterAll
     await eventNet.closeClient();
