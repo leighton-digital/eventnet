@@ -151,7 +151,7 @@ describe("Test Consumer > ", () => {
     // Use the Jest assertion to check
     // the event against the JSONschema,
     // more on this below
-    expect(Event.detail).toMatchJsonSchema(EventSpec);
+    expect(Event.Detail).toMatchJsonSchema(EventSpec);
 
     // send the event to the EventBrdge instance
     const sendEvents = await eventNet.sendEvent(Event, EventBusName)
