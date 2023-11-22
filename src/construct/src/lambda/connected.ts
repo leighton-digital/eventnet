@@ -1,11 +1,12 @@
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { BatchWriteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+
 import { APIGatewayProxyEvent } from "aws-lambda";
 
-import * as AWS from "aws-sdk";
-
-const ddb = new AWS.DynamoDB.DocumentClient({
-  apiVersion: "2012-08-10",
+const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
 });
+const docClient = DynamoDBDocumentClient.from(client);
 
 export const main = async (event: APIGatewayProxyEvent) => {
   const tableName = process.env.TABLE_NAME;
@@ -14,15 +15,24 @@ export const main = async (event: APIGatewayProxyEvent) => {
     throw new Error("tableName not specified in process.env.TABLE_NAME");
   }
 
-  const putParams = {
-    TableName: tableName,
-    Item: {
-      PK: event.requestContext.connectionId,
+  const writeRequest = {
+    RequestItems: {
+      [`${process.env.TABLE_NAME}`]: [
+        {
+          PutRequest: {
+            Item: {
+              PK: event.requestContext.connectionId,
+            },
+          },
+        },
+      ],
     },
   };
 
   try {
-    await ddb.put(putParams).promise();
+    await await docClient.send(
+      new BatchWriteCommand(writeRequest)
+    );;
   } catch (err) {
     return {
       statusCode: 500,

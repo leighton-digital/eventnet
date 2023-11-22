@@ -1,4 +1,10 @@
-import { AWSClient, stackName } from "../AWSClient";
+import { AWSConfig, stackName } from "../AWSConfig";
+import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
+import { EventBridgeClient, PutEventsCommand } from "@aws-sdk/client-eventbridge";
+
+const clientSSM = new SSMClient(AWSConfig);
+const clientEventBridge = new EventBridgeClient(AWSConfig);
+
 const Ajv = require("ajv");
 const ajv = new Ajv({ strict: false });
 let WebSocket = require("ws");
@@ -14,7 +20,7 @@ export default class EventNetClient {
     this.WsClient = client;
   }
 
-  static async create(prefix?: string) {
+  static async create (prefix?: string) {
     let socketName = `${stackName.toLowerCase()}-eventNet-WS-URL`;
     if (prefix) {
       socketName = `${prefix}-eventNet-WS-URL`;
@@ -31,20 +37,20 @@ export default class EventNetClient {
   }
 
   private static getParam = async (paramKey: string): Promise<any> => {
-    const SSM = new AWSClient.SSM();
     const input = {
       Name: paramKey,
     };
-    const response = await SSM.getParameter(input).promise();
+    const command = new GetParameterCommand(input);
+    const response = await clientSSM.send(command);
     //@ts-ignore
     return response.Parameter.Value;
   };
 
-  public async closeClient() {
+  public async closeClient () {
     return await this.WsClient.close();
   }
 
-  private waitForState(socket: any, state: any) {
+  private waitForState (socket: any, state: any) {
     const self = this;
     return new Promise(function (resolve) {
       setTimeout(function () {
@@ -57,21 +63,21 @@ export default class EventNetClient {
     });
   }
 
-  public waitForOpenSocket() {
+  public waitForOpenSocket () {
     const state = this.WsClient.OPEN;
     return this.waitForState(this.WsClient, state);
   }
 
-  public waitForClosedSocket() {
+  public waitForClosedSocket () {
     const state = this.WsClient.CLOSED;
     return this.waitForState(this.WsClient, state);
   }
 
-  public clearEventHistory() {
+  public clearEventHistory () {
     this.WsMessagesStore = [];
   }
 
-  public async validateAndSendEvent(event: any, schema: any) {
+  public async validateAndSendEvent (event: any, schema: any) {
     const self = this;
     var validate = ajv.compile(schema);
     var valid = validate(schema.detail);
@@ -84,7 +90,6 @@ export default class EventNetClient {
       throw new Error("Event does not match schema");
     }
 
-    const eventBusInstance = new AWSClient.EventBridge();
     const ents = {
       Entries: [
         {
@@ -96,10 +101,11 @@ export default class EventNetClient {
       ],
     };
     self.WsClient.close();
-    return await eventBusInstance.putEvents(ents);
+    const command = new PutEventsCommand(ents);
+    return await clientEventBridge.send(command);
   }
 
-  public matchEnvelope(
+  public matchEnvelope (
     source: string,
     type: string,
     total = 1,

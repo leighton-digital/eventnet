@@ -1,8 +1,11 @@
 import { APIGatewayProxyEvent } from 'aws-lambda';
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DeleteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 
-import * as AWS from 'aws-sdk';
-
-const ddb = new AWS.DynamoDB.DocumentClient({ apiVersion: '2012-08-10', region: process.env.AWS_REGION });
+const client = new DynamoDBClient({
+  region: process.env.AWS_REGION,
+});
+const docClient = DynamoDBDocumentClient.from(client);
 
 export const main = async (event: APIGatewayProxyEvent) => {
   const tableName = process.env.TABLE_NAME;
@@ -11,7 +14,7 @@ export const main = async (event: APIGatewayProxyEvent) => {
     throw new Error('tableName not specified in process.env.TABLE_NAME');
   }
 
-  const deleteParams = {
+  const deleteParam = {
     TableName: tableName,
     Key: {
       PK: event.requestContext.connectionId,
@@ -19,7 +22,9 @@ export const main = async (event: APIGatewayProxyEvent) => {
   };
 
   try {
-    await ddb.delete(deleteParams).promise();
+    await docClient.send(
+      new DeleteCommand(deleteParam)
+    );
   } catch (err) {
     return { statusCode: 500, body: 'Failed to disconnect: ' + JSON.stringify(err) };
   }
