@@ -1,4 +1,4 @@
-import { AWSClient, EventNetClient, stackName } from "./utils/index";
+import { AWSConfig, EventNetClient, stackName } from "./utils/index";
 import matchers from "./utils/exports";
 
 type GlobalWithExpectKey = { expect: any };
@@ -21,9 +21,9 @@ if (isGlobalWithExpectKey(global)) {
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toMatchSchema(eventSchema: any): Promise<R>;
+      toMatchSchema (eventSchema: any): Promise<R>;
     }
   }
 }
 
-export { AWSClient, EventNetClient, stackName };
+export { AWSConfig, EventNetClient, stackName };

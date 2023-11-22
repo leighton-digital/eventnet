@@ -1,3 +1,3 @@
-import { AWSClient, stackName } from "./AWSClient";
+import { AWSConfig, stackName } from "./AWSConfig";
 import EventNetClient from "./WSClient";
-export { AWSClient, EventNetClient, stackName };
+export { AWSConfig, EventNetClient, stackName };

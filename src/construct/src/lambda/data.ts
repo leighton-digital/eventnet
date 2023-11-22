@@ -1,8 +1,15 @@
-import * as AWS from "aws-sdk";
+import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
+import { ApiGatewayManagementApiClient, GetConnectionCommand, PostToConnectionCommand } from "@aws-sdk/client-apigatewaymanagementapi";
 
-const ddb = new AWS.DynamoDB.DocumentClient({
-  apiVersion: "2012-08-10",
+const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
+});
+const docClient = DynamoDBDocumentClient.from(client);
+
+const apiClient = new ApiGatewayManagementApiClient({
+  region: process.env.AWS_REGION,
+  endpoint: `https://${process.env.API_ID}.execute-api.${process.env.AWS_REGION}.amazonaws.com/${process.env.STAGE}`
 });
 
 export const main = async (event: any): Promise<any> => {
@@ -19,23 +26,17 @@ export const main = async (event: any): Promise<any> => {
   }
 
   try {
-    connectionData = await ddb
-      .scan({ TableName: tableName, ProjectionExpression: "PK" })
-      .promise();
+    connectionData = await docClient.send(new ScanCommand({ TableName: tableName, ProjectionExpression: "PK" }));
   } catch (e) {
     return { statusCode: 500, body: e };
   }
 
-  const apigwManagementApi = new AWS.ApiGatewayManagementApi({
-    apiVersion: "2018-11-29",
-    endpoint: `https://${process.env.API_ID}.execute-api.${process.env.AWS_REGION}.amazonaws.com/${process.env.STAGE}`,
-  });
-
   const postCalls = (connectionData.Items ?? []).map(async ({ PK }) => {
     try {
-      await apigwManagementApi
-        .postToConnection({ ConnectionId: PK, Data: JSON.stringify(event) })
-        .promise();
+      const input = { ConnectionId: PK, Data: JSON.stringify(event) };
+
+      const command = new PostToConnectionCommand(input);
+      apiClient.send(command);
     } catch (e) {
       console.log(e);
       throw e;
