@@ -104,11 +104,16 @@ describe("Test Producer > ", () => {
 
     // Matches any * source
     // Matches any * detailtype
-    // Returns when TWO record have been found
+    // Returns when ONE record have been found
     // Or waits for 10 secs
-    const events = await eventNet.matchEnvelope("*", "*", 2, 100000);
+    const events = await eventNet.matchEnvelope("*", "*", 1, 100000);
 
     await eventNet.waitForClosedSocket()
+
+    // Use the Jest assertion to check
+    // the event against the JSONschema,
+    // more on this below
+    expect(events[0].detail).toMatchJsonSchema(EventSpec);
 
     expect(resp.data.body).toBeDefined();
     expect(events).toHaveLength(2);
@@ -143,7 +148,13 @@ describe("Test Consumer > ", () => {
         },
       },
 
-    const sendEvents = await eventNet.validateAndSendEvent(Event, EventSpec)
+    // Use the Jest assertion to check
+    // the event against the JSONschema,
+    // more on this below
+    expect(Event.detail).toMatchJsonSchema(EventSpec);
+
+    // send the event to the EventBrdge instance
+    const sendEvents = await eventNet.sendEvent(Event, EventBusName)
     await eventNet.waitForClosedSocket()
 
     // Check DynamoDb Table or S3 that events have been stored or modified
