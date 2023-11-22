@@ -10,19 +10,19 @@ A CDK construct that allows you to connect a WebSocket to an EventBridge instanc
 
 ## Test Client
 
-### Event Producers - Perform and Action and Collect Events
+#### Event Producers - Perform and Action and Collect Events
 
 The Test Client connects to the WebSocket and collects the events for Jest assertions.
 
-### Event Consumers - Validating and Sending Events
+#### Event Consumers - Validating and Sending Events
 
 The Test Client validates the event you will send to ensure it matches the Schema; if it is valid, it will send the events. You can then check that the events sent trigger the correct response from your application, such as saving the record to DynamoDb.
 
-### Jest Schema Assertion - Assert Events Match the Prescibed Schema
+#### Jest Schema Assertion - Assert Events Match the Prescibed Schema
 
 Test that your captured events match a published JSON Schema specification.
 
-## Event Monitoring Client - Collect Events to a WebUI in realtime
+#### Event Monitoring Client - Collect Events to a WebUI in realtime
 
 A web application that can connect to your WebSocket, allowing you to inspect, save and copy the published events. Useful when developing for instant feedback without adding lots of console logs to your Jest tests or logging out through compute.
 
