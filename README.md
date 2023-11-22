@@ -102,10 +102,10 @@ describe("Test Producer > ", () => {
     const payload = { some: "something"};
     const resp = await axios.post(url, payload);
 
-    //Matches any * source
-    //Matches any * detailtype
-    //Returns when TWO record have been found
-    //Or waits for 10 secs
+    // Matches any * source
+    // Matches any * detailtype
+    // Returns when TWO record have been found
+    // Or waits for 10 secs
     const events = await eventNet.matchEnvelope("*", "*", 2, 100000);
 
     await eventNet.waitForClosedSocket()
