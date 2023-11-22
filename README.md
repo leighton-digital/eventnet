@@ -36,7 +36,7 @@ Install and import the construct.
 import { EventNet } from "@leighton-digital/event-net/lib/construct/";
 ```
 
-Set up the EventNet instance with the EventBridge instance
+Set up the EventNet instance with the EventBridge instance.
 
 ```Typescript
 const eventNet = new EventNet(
@@ -54,6 +54,8 @@ const eventNet = new EventNet(
 - **prefix**: usually your stackname, used to namespace the event net resources. Usually, your stackName. If you want to monitor multiple buses in the same application, you can construct an individual reference such as `${stackName}-1` and `${stackName}-2`, as long as you can reproduce this when creating the connection in your test suite
 - **eventBusName**: name of an existing EventBridge bus you want to subscribe too
 - **includeOutput**: prints out the WebSocket URL for easy access for the WebClient
+
+**Note:** Wrap this construct in a conditional that omits it from PRODUCTION; this is for test use only and exposes your events through a WebSocket,
 
 ---
 
