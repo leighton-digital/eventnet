@@ -55,7 +55,7 @@ const eventNet = new EventNet(
 - **eventBusName**: name of an existing EventBridge bus you want to subscribe too
 - **includeOutput**: prints out the WebSocket URL for easy access for the WebClient
 
-**Note:** Wrap this construct in a conditional that omits it from PRODUCTION; this is for test use only and exposes your events through a WebSocket,
+**Note:** Wrap this construct in a conditional that omits it from PRODUCTION; this is for test use only and exposes your events through a WebSocket.
 
 ---
 
