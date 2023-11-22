@@ -146,7 +146,7 @@ describe("Test Consumer > ", () => {
     const sendEvents = await eventNet.validateAndSendEvent(Event, EventSpec)
     await eventNet.waitForClosedSocket()
 
-    // Check in DynamoDb Table that events have been stored in
+    // Check DynamoDb Table or S3 that events have been stored or modified
     // ...
     // Following can be added to afterEach/afterAll
     await eventNet.closeClient();
