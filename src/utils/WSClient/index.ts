@@ -1,6 +1,11 @@
 import { AWSConfig, stackName } from "../AWSConfig";
 import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
-import { EventBridgeClient, PutEventsCommand } from "@aws-sdk/client-eventbridge";
+import {
+  EventBridgeClient,
+  PutEventsCommand,
+} from "@aws-sdk/client-eventbridge";
+
+console.log(AWSConfig);
 
 const clientSSM = new SSMClient(AWSConfig);
 const clientEventBridge = new EventBridgeClient(AWSConfig);
@@ -20,7 +25,7 @@ export default class EventNetClient {
     this.WsClient = client;
   }
 
-  static async create (prefix?: string) {
+  static async create(prefix?: string) {
     let socketName = `${stackName.toLowerCase()}-eventNet-WS-URL`;
     if (prefix) {
       socketName = `${prefix}-eventNet-WS-URL`;
@@ -46,11 +51,11 @@ export default class EventNetClient {
     return response.Parameter.Value;
   };
 
-  public async closeClient () {
+  public async closeClient() {
     return await this.WsClient.close();
   }
 
-  private waitForState (socket: any, state: any) {
+  private waitForState(socket: any, state: any) {
     const self = this;
     return new Promise(function (resolve) {
       setTimeout(function () {
@@ -63,21 +68,21 @@ export default class EventNetClient {
     });
   }
 
-  public waitForOpenSocket () {
+  public waitForOpenSocket() {
     const state = this.WsClient.OPEN;
     return this.waitForState(this.WsClient, state);
   }
 
-  public waitForClosedSocket () {
+  public waitForClosedSocket() {
     const state = this.WsClient.CLOSED;
     return this.waitForState(this.WsClient, state);
   }
 
-  public clearEventHistory () {
+  public clearEventHistory() {
     this.WsMessagesStore = [];
   }
 
-  public async validateAndSendEvent (event: any, schema: any) {
+  public async validateAndSendEvent(event: any, schema: any) {
     const self = this;
     var validate = ajv.compile(schema);
     var valid = validate(schema.detail);
@@ -105,7 +110,7 @@ export default class EventNetClient {
     return await clientEventBridge.send(command);
   }
 
-  public matchEnvelope (
+  public matchEnvelope(
     source: string,
     type: string,
     total = 1,
