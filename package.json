@@ -14,13 +14,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/leighton-digital/event-net.git"
+    "url": "git+https://github.com/leighton-digital/eventnet.git"
   },
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/leighton-digital/event-net/issues"
+    "url": "https://github.com/leighton-digital/eventnet/issues"
   },
-  "homepage": "https://github.com/leighton-digital/event-net#readme",
+  "homepage": "https://github.com/leighton-digital/eventnet#readme",
   "devDependencies": {
     "@types/aws-lambda": "^8.10.115",
     "@types/jest": "^29.4.0",
@@ -61,10 +61,14 @@
     "ws": "^8.13.0",
     "yargs": "^17.7.2"
   },
-  "publishConfig": {
-    "@leighton-digital:registry": "https://npm.pkg.github.com"
-  },
   "bin": {
-    "eventnet": "./cli/index.js"
-  }
+    "eventnet": "cli/index.js"
+  },
+  "description": "<img width=\"50px\" height=\"50px\" align=\"right\" alt=\"EventNet Logo\" src=\"eventnet.png?sanitize=true\" title=\"Leighton EventNet\"/>",
+  "keywords": [
+    "CDK",
+    "Jest",
+    "test"
+  ],
+  "author": "leighton digital"
 }
