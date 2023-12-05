@@ -5,8 +5,6 @@ import {
   PutEventsCommand,
 } from "@aws-sdk/client-eventbridge";
 
-console.log(AWSConfig);
-
 const clientSSM = new SSMClient(AWSConfig);
 const clientEventBridge = new EventBridgeClient(AWSConfig);
 
