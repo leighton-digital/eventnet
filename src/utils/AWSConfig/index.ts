@@ -1,7 +1,7 @@
 import { loadArg } from "../options/args";
 const { getDefaultRoleAssumerWithWebIdentity } = require("@aws-sdk/client-sts");
 const { defaultProvider } = require("@aws-sdk/credential-provider-node");
-import { fromProcess } from "@aws-sdk/credential-providers";
+const { fromIni } = require("@aws-sdk/credential-providers");
 
 export const stackName = loadArg({
   cliArg: "stack",
@@ -19,18 +19,21 @@ const profile = loadArg({
   processEnvName: "PROFILE",
 });
 
-console.log({ profile, region, stackName });
-
-let provider = defaultProvider({
-  roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity({ region }),
-});
+let AWSConfigObject: any = {
+  provider: defaultProvider({
+    roleAssumerWithWebIdentity: getDefaultRoleAssumerWithWebIdentity({
+      region,
+    }),
+  }),
+};
 
 if (profile) {
-  provider = defaultProvider({
-    credentials: fromProcess({
+  AWSConfigObject = {
+    credentials: fromIni({
       profile,
     }),
-  });
+    region,
+  };
 }
 
-export const AWSConfig = { credentialDefaultProvider: provider };
+export const AWSConfig = AWSConfigObject;

@@ -1,6 +1,6 @@
 {
   "name": "@leighton-digital/eventnet",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
@@ -58,9 +58,6 @@
     "shelljs": "^0.8.5",
     "ws": "^8.13.0",
     "yargs": "^17.7.2"
-  },
-  "bin": {
-    "eventnet": "cli/index.js"
   },
   "description": "Several tools for working with AWS EventBridge and the events published through it.",
   "keywords": [

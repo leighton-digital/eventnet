@@ -82,19 +82,7 @@ export default class EventNetClient {
     this.WsMessagesStore = [];
   }
 
-  public async validateAndSendEvent(event: any, schema: any) {
-    const self = this;
-    var validate = ajv.compile(schema);
-    var valid = validate(schema.detail);
-    if (!valid) {
-      let warning: string = "Event";
-      validate.errors.forEach((msg: any) => {
-        warning = warning + ` ${msg.message}`;
-      });
-
-      throw new Error("Event does not match schema");
-    }
-
+  public async sendEvent(event: any) {
     const ents = {
       Entries: [
         {
@@ -105,7 +93,6 @@ export default class EventNetClient {
         },
       ],
     };
-    self.WsClient.close();
     const command = new PutEventsCommand(ents);
     return await clientEventBridge.send(command);
   }
