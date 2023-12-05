@@ -22,7 +22,7 @@ The Test Client validates the event you will send to ensure it matches the Schem
 
 Test that your captured events match a published JSON Schema specification.
 
-#### Event Monitoring Client - Collect Events to a WebUI in realtime
+#### COMING SOON: Event Monitoring Client - Collect Events to a WebUI in realtime
 
 A web application that can connect to your WebSocket, allowing you to inspect, save and copy the published events. Useful when developing for instant feedback without adding lots of console logs to your Jest tests or logging out through compute.
 
@@ -30,7 +30,15 @@ A web application that can connect to your WebSocket, allowing you to inspect, s
 
 ## Using the EventNet CDK Construct
 
-Install and import the construct.
+Install:
+
+```bash
+
+yarn add @leighton-digitial/eventnet
+
+```
+
+& Import the construct:
 
 ```Typescript
 import { EventNet } from "@leighton-digital/event-net/lib/construct/";
@@ -41,12 +49,12 @@ Set up the EventNet instance with the EventBridge instance.
 ```Typescript
 const eventNet = new EventNet(
     this,
-    "event-net",
+    "EventNet",
     {
         prefix: stackName,
         eventBusName: eventBusName,
         includeOutput: true, // optional, default is false
-        invludeLogs: true // optional, default is false
+        includeLogs: true // optional, default is false
     }
 );
 ```
@@ -68,7 +76,7 @@ const eventNet = new EventNet(
 - The Test Client collects the events from the WebSocket.
 
 ```Typescript
-import { EventNetClient } from "@leighton-digital/event-net";
+import { EventNetClient } from "@leighton-digital/eventnet";
 ```
 
 The EventNet client expects your `prefix` from the CDK construct to be passed in as `'--stack=my-service-dev'`. This corresponds to the Cloud Formation stack name produced by CDK. i.e.:
@@ -83,7 +91,7 @@ If you are using multiple Event Buses, we strongly recommend basing the names fr
 
 ```Typescript
 
-import { EventNetClient, stackName } from "@leighton-digital/event-net";
+import { EventNetClient, stackName } from "@leighton-digital/eventnet";
 
 
 describe("Test Producer > ", () => {
@@ -111,7 +119,7 @@ describe("Test Producer > ", () => {
     await eventNet.waitForClosedSocket()
 
     // Use the Jest assertion to check
-    // the event against the JSONschema,
+    // the event against the JSONSchema,
     // more on this below
     expect(events[0].detail).toMatchJsonSchema(EventSpec);
 
@@ -131,7 +139,7 @@ describe("Test Producer > ", () => {
 
 ```Typescript
 
-import { EventNetClient } from "@leighton-digital/event-net";
+import { EventNetClient } from "@leighton-digital/eventnet";
 import * as EventSpec from "../../jsonSpecs/someSchema-v1.json";
 
 describe("Test Consumer > ", () => {
@@ -149,9 +157,9 @@ describe("Test Consumer > ", () => {
       },
 
     // Use the Jest assertion to check
-    // the event against the JSONschema,
+    // the event against the JSONSchema,
     // more on this below
-    expect(Event.Detail).toMatchJsonSchema(EventSpec);
+    expect(Event).toMatchJsonSchema(EventSpec);
 
     // send the event to the EventBrdge instance
     const sendEvents = await eventNet.sendEvent(Event, EventBusName)
@@ -190,12 +198,12 @@ expect(singleMessage).toMatchJsonSchema(EventSpec);
 
 ---
 
-## Using the EventNet Web Client
+## COMING SOON: Using the EventNet Web Client
 
 First, you need to run the client:
 
 ```
-eventNet start
+eventnet start
 ```
 
 This will open a web client on url: http://localhost:3000

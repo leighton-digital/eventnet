@@ -1,6 +1,6 @@
 import { Construct } from "constructs";
-import { WebSocketLambdaIntegration } from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
-import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
+import { WebSocketLambdaIntegration } from "aws-cdk-lib/aws-apigatewayv2-integrations";
+import * as apigwv2 from "aws-cdk-lib/aws-apigatewayv2";
 import * as cdk from "aws-cdk-lib";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as events from "aws-cdk-lib/aws-events";
@@ -83,6 +83,7 @@ export class EventNet extends Construct {
         entry: path.join(path.resolve(__dirname), `/src/lambda/connected.js`),
         environment: {
           TABLE_NAME: table.tableName,
+          REGION: region,
         },
         memorySize: 1024,
         architecture: lambda.Architecture.ARM_64,
@@ -113,6 +114,7 @@ export class EventNet extends Construct {
         ),
         environment: {
           TABLE_NAME: table.tableName,
+          REGION: region,
         },
         memorySize: 1024,
         architecture: lambda.Architecture.ARM_64,
@@ -163,6 +165,7 @@ export class EventNet extends Construct {
           TABLE_NAME: table.tableName,
           API_ID: webSocketApi.apiId,
           STAGE: wsStage.stageName,
+          REGION: region,
         },
         memorySize: 1024,
         architecture: lambda.Architecture.ARM_64,
@@ -175,6 +178,14 @@ export class EventNet extends Construct {
         entry: path.join(path.resolve(__dirname), `/src/lambda/data.js`),
       }
     );
+
+    if (props.includeLogs) {
+      new LogGroup(this, `nodeJsFunctionLogGroupDataHandler`, {
+        logGroupName: `/aws/lambda/${eventNetFunction.functionName}`,
+        removalPolicy: cdk.RemovalPolicy.DESTROY,
+        retention: RetentionDays.ONE_WEEK,
+      });
+    }
 
     rule.addTarget(
       new targets.LambdaFunction(eventNetFunction, {

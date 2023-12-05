@@ -18,7 +18,7 @@ export default {
   toMatchSchema(theEvent: any, theSchema: any) {
     try {
       var validate = ajv.compile(theSchema);
-      var valid = validate(theEvent.detail);
+      var valid = validate(theEvent.detail || theEvent.Detail);
       if (!valid) {
         let warning: string = "Event";
         validate.errors.forEach((msg: any) => {

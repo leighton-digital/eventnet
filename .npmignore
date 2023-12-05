@@ -6,3 +6,5 @@ src
 client
 clisrc
 !lib/construct/src
+*.githhub
+cli
