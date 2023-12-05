@@ -17,6 +17,7 @@ export const region = loadArg({
 const profile = loadArg({
   cliArg: "profile",
   processEnvName: "PROFILE",
+  defaultValue: "NONE",
 });
 
 let AWSConfigObject: any = {
@@ -27,7 +28,7 @@ let AWSConfigObject: any = {
   }),
 };
 
-if (profile) {
+if (profile !== "NONE") {
   AWSConfigObject = {
     credentials: fromIni({
       profile,
