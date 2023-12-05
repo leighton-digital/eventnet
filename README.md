@@ -41,7 +41,7 @@ yarn add @leighton-digitial/eventnet
 & Import the construct:
 
 ```Typescript
-import { EventNet } from "@leighton-digital/event-net/lib/construct/";
+import { EventNet } from "@leighton-digital/eventnet/lib/construct/";
 ```
 
 Set up the EventNet instance with the EventBridge instance.
