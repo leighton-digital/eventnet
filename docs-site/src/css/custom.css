@@ -1,0 +1,267 @@
+/* =========================================
+   Leighton-style theming for Docusaurus
+   -----------------------------------------
+   - Keep Docusaurus/Infima intact
+   - Use tokens (CSS variables) first
+   - Minimal, targeted overrides
+   ========================================= */
+
+/* ---------- Brand tokens (LIGHT mode) ---------- */
+:root {
+  /* Typography */
+  --ifm-font-base:
+    "Euclidcirculara", system-ui, -apple-system, Segoe UI, Roboto, Arial,
+    sans-serif;
+  --ifm-heading-font-family: var(--ifm-font-base);
+  --ifm-font-weight-base: 400;
+  --ifm-heading-font-weight: 600;
+  --ifm-line-height-base: 1.6;
+
+  /* Colors (from Leighton palette) */
+  /* Primary (buttons/links) – Untitled UI primary 600/700 */
+  --brand-primary-50: #f9f5ff;
+  --brand-primary-100: #f4ebff;
+  --brand-primary-300: #d6bbfb;
+  --brand-primary-600: #7f56d9;
+  --brand-primary-700: #6941c6;
+
+  /* Accent magenta used across links/icons */
+  --brand-accent: #da1884;
+
+  /* Deep background purple used on site sections/footer */
+  --brand-deep: #13022b;
+
+  /* Base neutrals */
+  --brand-gray-900: #101828;
+  --brand-gray-700: #344054;
+  --brand-gray-600: #475467;
+  --brand-gray-500: #667085;
+  --brand-gray-300: #d0d5dd;
+
+  /* Map to Docusaurus theme variables */
+  --ifm-color-primary: var(--brand-primary-600);
+  --ifm-color-primary-dark: var(--brand-primary-700);
+  --ifm-color-primary-darker: #5f34b8; /* computed */
+  --ifm-color-primary-light: #9873e1;
+  --ifm-color-primary-lighter: #b79aeb;
+
+  --ifm-color-content: var(--brand-gray-900);
+  --ifm-link-color: var(--brand-accent); /* magenta links like Leighton */
+  --ifm-link-hover-color: var(--brand-primary-700);
+
+  /* Shape & shadow */
+  --ifm-global-radius: 12px;
+  --ifm-button-border-radius: 9999px; /* pill buttons */
+  --ifm-card-border-radius: 12px;
+  --ifm-global-shadow-lw: 0 8px 50px rgba(0, 0, 0, 0.05);
+
+  /* Code blocks */
+  --ifm-code-font-size: 0.9rem;
+}
+
+/* ---------- Brand tokens (DARK mode) ---------- */
+[data-theme="dark"] {
+  --ifm-background-color: #0f0a1f; /* near --brand-deep but a bit lighter for contrast */
+  --ifm-color-content: #eef0f5;
+
+  --ifm-color-primary: #b79aeb; /* lighten primary on dark */
+  --ifm-link-color: #ff49b6; /* lighten accent */
+  --ifm-link-hover-color: #caa8ff;
+
+  /* Optional card bg */
+  --ifm-card-background-color: #140b2b;
+}
+
+/* ---------- Global basics ---------- */
+:root,
+html,
+body {
+  text-rendering: optimizeLegibility;
+}
+
+/* Optional: a reusable gradient section like Leighton’s hero/background */
+.leighton-gradient {
+  background-image: linear-gradient(270deg, #13022b, #230054);
+  color: #fff;
+}
+
+/* ---------- Navbar ---------- */
+.navbar {
+  /* Slight translucency and subtle divider (Leighton uses a thin white line on dark) */
+  backdrop-filter: saturate(140%) blur(6px);
+  box-shadow: none;
+}
+.navbar--fixed-top {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Keep the logo compact */
+.navbar__logo img {
+  height: 28px;
+}
+
+/* ---------- Footer ---------- */
+.footer--dark {
+  background-color: var(--brand-deep);
+  color: #fff;
+  border-top: 0;
+}
+.footer__title,
+.footer__item {
+  color: #fff;
+}
+.footer {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+/* ---------- Buttons ---------- */
+/* Make Docusaurus primary buttons look like Leighton’s rounded, medium weight, soft shadow */
+.button--primary {
+  border-radius: var(--ifm-button-border-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  font-weight: 600;
+  font-family: "Montserrat", sans-serif, var(--ifm-font-base);
+  letter-spacing: 0.3px;
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease;
+}
+.button--primary:hover {
+  transform: translateY(-1px);
+}
+
+/* Secondary (outlined) button inspired by .btn-secondary */
+.button--secondary {
+  border-radius: 9999px;
+  border: 1px solid var(--brand-deep);
+  background: transparent;
+  color: var(--brand-deep);
+  font-family: "Montserrat", sans-serif, var(--ifm-font-base);
+}
+.button--secondary:hover {
+  background: var(--brand-deep);
+  color: #fff;
+}
+
+/* Link-like button (uui-button-link-2 feel) */
+.button--link {
+  color: var(--brand-accent);
+  font-weight: 600;
+}
+.button--link:hover {
+  color: var(--ifm-link-hover-color);
+}
+
+/* ---------- Cards / surfaces ---------- */
+.brand-card,
+.card {
+  border-radius: var(--ifm-card-border-radius);
+  box-shadow: var(--ifm-global-shadow-lw);
+  transition:
+    transform 0.12s ease,
+    box-shadow 0.12s ease,
+    border-color 0.12s ease;
+}
+.brand-card:hover,
+.card:hover {
+  transform: translateY(-2px);
+}
+
+/* ---------- Headings & text rhythm (Leighton scales) ---------- */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: var(--ifm-heading-font-weight);
+  letter-spacing: 0.1px;
+  margin-bottom: 10px;
+}
+h1 {
+  font-size: clamp(2rem, 2.4rem, 2.6rem);
+  line-height: 1.2;
+}
+h2 {
+  font-size: clamp(1.75rem, 2rem, 2.2rem);
+  line-height: 1.3;
+}
+h3 {
+  font-size: 1.5rem;
+  line-height: 1.35;
+}
+
+/* Paragraph readability like Leighton (16/24) */
+p,
+.markdown p {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+/* ---------- Links (accent magenta) ---------- */
+a:not(.button) {
+  text-decoration-thickness: 0.08em;
+  text-underline-offset: 0.15em;
+}
+
+/* ---------- Homepage hero block (optional) ----------
+   Use on your home page container to mirror Leighton’s centered hero copy.
+   Example in src/pages/index.tsx:
+   <main className="container margin-vert--lg leighton-gradient"> … </main> */
+.leighton-hero {
+  text-align: center;
+  padding: 4rem 1rem;
+}
+.leighton-hero h1,
+.leighton-hero .hero__title {
+  color: #fff;
+  font-weight: 500; /* Euclid medium */
+}
+.leighton-hero p,
+.leighton-hero .hero__subtitle {
+  color: #fff;
+  font-family: "Montserrat", sans-serif, var(--ifm-font-base);
+  font-size: 1rem;
+  line-height: 1.5rem;
+  opacity: 0.95;
+}
+
+/* ---------- Forms (taste of Leighton’s rounded inputs) ---------- */
+input[type="text"],
+input[type="email"],
+input[type="search"],
+select,
+textarea {
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+
+/* Focus ring aligned to brand tokens */
+:where(input, select, textarea, .button):focus-visible {
+  outline: 2px solid var(--brand-primary-100);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px var(--brand-primary-100);
+}
+
+/* ---------- Utilities (handy for home cards/grid) ---------- */
+.grid-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 16px;
+}
+.badge-accent {
+  color: var(--brand-accent);
+  font-weight: 600;
+}
+
+/* ---------- Code blocks: keep defaults, just slightly round ---------- */
+.theme-code-block,
+.codeBlockLines_node_modules-\@docusaurus-theme-classic-lib-theme-CodeBlock-Content-styles-module {
+  border-radius: 10px;
+}
+
+/* ---------- Optional: doc page header divider to echo Leighton’s clean sections ---------- */
+.theme-doc-markdown header + p {
+  margin-top: 0.4rem;
+}

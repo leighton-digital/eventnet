@@ -1,12 +1,12 @@
-import "./globals.css";
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import './globals.css';
+import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: "EventNet Web Client",
-  description: "Monitor Realtime Events from AWS EventBridge",
+  title: 'EventNet Web Client',
+  description: 'Monitor Realtime Events from AWS EventBridge',
 };
 
 export default function RootLayout({

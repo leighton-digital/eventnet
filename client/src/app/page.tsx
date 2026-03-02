@@ -1,52 +1,52 @@
-"use client";
-import { Light as SyntaxHighlighter } from "react-syntax-highlighter";
-import json from "react-syntax-highlighter/dist/esm/languages/hljs/json";
-import { docco } from "react-syntax-highlighter/dist/esm/styles/hljs";
-SyntaxHighlighter.registerLanguage("json", json);
-import React from "react";
-import leightonLogo from "./Leighton-logo.svg";
-import { EventCard } from "./EventCard";
-import { EmptyCard } from "./EmptyCard";
-import { EventSavedCard } from "./EventSavedCard";
-import { copyToClipBoard } from "./copyToClipBoard";
-import { Transition } from "@tailwindui/react";
+'use client';
+import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
+import json from 'react-syntax-highlighter/dist/esm/languages/hljs/json';
+import { docco } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+
+SyntaxHighlighter.registerLanguage('json', json);
 
 import {
-  Drawer,
-  Typography,
-  IconButton,
-  Badge,
-  Dialog,
-  DialogHeader,
-  DialogBody,
-  DialogFooter,
-  Card,
-  CardBody,
-} from "@material-tailwind/react";
-
-import { Grow } from "@mui/material";
-import {
-  XMarkIcon,
   BookmarkIcon,
   BookmarkSlashIcon,
   ClipboardIcon,
-  MagnifyingGlassIcon,
   EnvelopeIcon,
   LinkIcon,
-} from "@heroicons/react/20/solid";
-import Image from "next/image";
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/react/20/solid';
+import {
+  Badge,
+  Card,
+  CardBody,
+  Dialog,
+  DialogBody,
+  DialogFooter,
+  DialogHeader,
+  Drawer,
+  IconButton,
+  Typography,
+} from '@material-tailwind/react';
+import { Grow } from '@mui/material';
+import { Transition } from '@tailwindui/react';
+import Image from 'next/image';
+import React from 'react';
+import { copyToClipBoard } from './copyToClipBoard';
+import { EmptyCard } from './EmptyCard';
+import { EventCard } from './EventCard';
+import { EventSavedCard } from './EventSavedCard';
+import leightonLogo from './Leighton-logo.svg';
 
 let eventsList: any = [];
 let displayedEvent: any = {};
 
 export default function Home() {
   const [loaded, setLoaded] = React.useState(false);
-  const [url, setUrl] = React.useState("");
+  const [url, setUrl] = React.useState('');
   const [open, setOpen] = React.useState(false);
   const [openPop, setOpenPop] = React.useState(false);
   const [allEvents, setAllEvent] = React.useState<any>([]);
   const [savedEvents, setSavedEvent] = React.useState<any>([]);
-  const [savedCount, setSavedCount] = React.useState("0");
+  const [savedCount, setSavedCount] = React.useState('0');
 
   const openDrawer = () => setOpen(true);
   const closeDrawer = () => setOpen(false);
@@ -58,9 +58,9 @@ export default function Home() {
   };
 
   React.useEffect(() => {
-    const saved = localStorage.getItem("eventStore");
+    const saved = localStorage.getItem('eventStore');
     if (saved) {
-      const saveToState = JSON.parse("[null]");
+      const saveToState = JSON.parse('[null]');
       if (!saveToState[0] === null) {
         eventsList = saveToState;
         setSavedEvent(saveToState);
@@ -83,7 +83,7 @@ export default function Home() {
     if (id && !saved) {
       foundEvent = eventsList.find((element: any) => element?.id === id);
       savedEvents.push(foundEvent);
-      localStorage.setItem("eventStore", JSON.stringify(savedEvents));
+      localStorage.setItem('eventStore', JSON.stringify(savedEvents));
     }
     setSavedCount(savedEvents.length);
   };
@@ -91,12 +91,12 @@ export default function Home() {
   const removeEvent = (id: string) => {
     if (id) {
       const filteredEvents = savedEvents.filter(
-        (element: any) => element?.id !== id
+        (element: any) => element?.id !== id,
       );
       const count = savedEvents.length - 1;
       setSavedCount(`${count}`);
       setSavedEvent(filteredEvents);
-      localStorage.setItem("eventStore", JSON.stringify(filteredEvents));
+      localStorage.setItem('eventStore', JSON.stringify(filteredEvents));
     }
   };
 
@@ -105,10 +105,10 @@ export default function Home() {
   };
 
   const handleConnect = () => {
-    if (url !== "") {
+    if (url !== '') {
       const WsClient = new WebSocket(url);
 
-      WsClient.onopen = function (e) {
+      WsClient.onopen = (e) => {
         setLoaded(true);
       };
       WsClient.onmessage = (event: any) => {
@@ -153,19 +153,19 @@ export default function Home() {
                     id="detailtype"
                     disabled={true}
                     className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    value={displayedEvent["detail-type"]}
+                    value={displayedEvent['detail-type']}
                   ></input>
                 </div>
               </form>
               <div className="event-content max-h-96 overflow-y-scroll">
                 <SyntaxHighlighter language="json" style={docco}>
-                  {JSON.stringify(displayedEvent, null, "\t")}
+                  {JSON.stringify(displayedEvent, null, '\t')}
                 </SyntaxHighlighter>
               </div>
             </DialogBody>
             <DialogFooter>
               {savedEvents.find(
-                (element: any) => element.id === displayedEvent.id
+                (element: any) => element.id === displayedEvent.id,
               ) ? (
                 <button
                   onClick={(event) => removeEvent(displayedEvent.id)}
@@ -194,7 +194,7 @@ export default function Home() {
                 Copy
               </button>
               <button
-                onClick={() => handleOpen("")}
+                onClick={() => handleOpen('')}
                 type="button"
                 className="px-3 py-2 text-xs font-medium text-center inline-flex items-center text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm py-2.5 mr-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
               >
@@ -217,18 +217,16 @@ export default function Home() {
           </div>
 
           <div className="event-cards p-4 flex flex-wrap items-left">
-            {allEvents.map(function (object: any, i: any) {
-              return (
-                <EventCard
-                  key={i}
-                  eventEnvelope={object}
-                  handleClick={handleOpen}
-                  handleSave={saveEvent}
-                  drawEvents={savedEvents}
-                  handleRemove={removeEvent}
-                ></EventCard>
-              );
-            })}
+            {allEvents.map((object: any, i: any) => (
+              <EventCard
+                key={i}
+                eventEnvelope={object}
+                handleClick={handleOpen}
+                handleSave={saveEvent}
+                drawEvents={savedEvents}
+                handleRemove={removeEvent}
+              ></EventCard>
+            ))}
           </div>
 
           <Drawer
@@ -253,16 +251,14 @@ export default function Home() {
               {savedEvents.length === 0 ? (
                 <EmptyCard></EmptyCard>
               ) : (
-                savedEvents.map(function (object: any, i: any) {
-                  return (
-                    <EventSavedCard
-                      key={i}
-                      eventEnvelope={object}
-                      handleClick={handleOpen}
-                      handleSave={removeEvent}
-                    ></EventSavedCard>
-                  );
-                })
+                savedEvents.map((object: any, i: any) => (
+                  <EventSavedCard
+                    key={i}
+                    eventEnvelope={object}
+                    handleClick={handleOpen}
+                    handleSave={removeEvent}
+                  ></EventSavedCard>
+                ))
               )}
             </div>
           </Drawer>

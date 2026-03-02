@@ -1,10 +1,9 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DynamoDBDocumentClient, ScanCommand } from "@aws-sdk/lib-dynamodb";
 import {
   ApiGatewayManagementApiClient,
-  GetConnectionCommand,
   PostToConnectionCommand,
-} from "@aws-sdk/client-apigatewaymanagementapi";
+} from '@aws-sdk/client-apigatewaymanagementapi';
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, ScanCommand } from '@aws-sdk/lib-dynamodb';
 
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -22,16 +21,16 @@ export const main = async (event: any): Promise<any> => {
   const tableName = process.env.TABLE_NAME;
 
   if (!tableName) {
-    throw new Error("tableName not specified in process.env.TABLE_NAME");
+    throw new Error('tableName not specified in process.env.TABLE_NAME');
   }
 
   if (!event) {
-    throw new Error("event body is missing");
+    throw new Error('event body is missing');
   }
 
   try {
     connectionData = await docClient.send(
-      new ScanCommand({ TableName: tableName, ProjectionExpression: "PK" })
+      new ScanCommand({ TableName: tableName, ProjectionExpression: 'PK' }),
     );
   } catch (e) {
     return { statusCode: 500, body: e };
@@ -54,7 +53,7 @@ export const main = async (event: any): Promise<any> => {
     await Promise.all(postCalls);
   } catch (e) {
     console.log(e);
-    console.error("error 500");
+    console.error('error 500');
   }
-  console.info("complete");
+  console.info('complete');
 };

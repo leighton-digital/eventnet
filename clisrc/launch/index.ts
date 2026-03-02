@@ -1,4 +1,4 @@
-import chalk from "chalk";
+import chalk from 'chalk';
 
 export const init = () => {
   console.log(
@@ -11,6 +11,6 @@ export const init = () => {
  /    / _/  / /             
 /_/|_/___/ /_/                        
                            
-    `)
+    `),
   );
 };

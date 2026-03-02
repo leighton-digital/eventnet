@@ -1,6 +1,6 @@
-import { APIGatewayProxyEvent } from 'aws-lambda';
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { DeleteCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DeleteCommand, DynamoDBDocumentClient } from '@aws-sdk/lib-dynamodb';
+import type { APIGatewayProxyEvent } from 'aws-lambda';
 
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -22,11 +22,12 @@ export const main = async (event: APIGatewayProxyEvent) => {
   };
 
   try {
-    await docClient.send(
-      new DeleteCommand(deleteParam)
-    );
+    await docClient.send(new DeleteCommand(deleteParam));
   } catch (err) {
-    return { statusCode: 500, body: 'Failed to disconnect: ' + JSON.stringify(err) };
+    return {
+      statusCode: 500,
+      body: 'Failed to disconnect: ' + JSON.stringify(err),
+    };
   }
 
   return { statusCode: 200, body: 'Disconnected.' };

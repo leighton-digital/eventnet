@@ -1,12 +1,12 @@
-import { AWSConfig, EventNetClient, stackName } from "./utils/index";
-import matchers from "./utils/exports";
+import matchers from './utils/exports';
+import { AWSConfig, EventNetClient, stackName } from './utils/index';
 
-type GlobalWithExpectKey = { expect: any };
+export type GlobalWithExpectKey = { expect: any };
 export const isGlobalWithExpectKey = (
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  global: any
-): global is GlobalWithExpectKey => "expect" in global;
+  global: any,
+): global is GlobalWithExpectKey => 'expect' in global;
 
 if (isGlobalWithExpectKey(global)) {
   const jestExpect = global.expect;
@@ -21,7 +21,7 @@ if (isGlobalWithExpectKey(global)) {
 declare global {
   namespace jest {
     interface Matchers<R> {
-      toMatchSchema (eventSchema: any): Promise<R>;
+      toMatchSchema(eventSchema: any): Promise<R>;
     }
   }
 }

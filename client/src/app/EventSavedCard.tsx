@@ -1,18 +1,17 @@
-import { copyToClipBoard } from "./copyToClipBoard";
-
-import { Card, CardBody } from "@material-tailwind/react";
-
 import {
-  XMarkIcon,
   BookmarkIcon,
   BookmarkSlashIcon,
   ClipboardIcon,
-  MagnifyingGlassIcon,
   EnvelopeIcon,
   LinkIcon,
-} from "@heroicons/react/20/solid";
+  MagnifyingGlassIcon,
+  XMarkIcon,
+} from '@heroicons/react/20/solid';
 
-//@ts-ignore
+import { Card, CardBody } from '@material-tailwind/react';
+import { copyToClipBoard } from './copyToClipBoard';
+
+//@ts-expect-error
 export function EventSavedCard({ eventEnvelope, handleClick, handleSave }) {
   return (
     <Card
@@ -77,7 +76,7 @@ export function EventSavedCard({ eventEnvelope, handleClick, handleSave }) {
                 id="detailtype"
                 disabled={true}
                 className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                value={eventEnvelope["detail-type"]}
+                value={eventEnvelope['detail-type']}
               ></input>
             </div>
 

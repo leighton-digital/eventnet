@@ -1,0 +1,30 @@
+name: Dependabot PR Auto-merge
+on: pull_request
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  dependabot:
+    name: 🛬 Auto-approve and enable auto-merge on Dependabot PR
+    runs-on: ubuntu-24.04
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'leighton-digital/eventnet'
+    steps:
+      - name: 🧩 Fetch Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@v2.5.0
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: 🛂 Auto-approve this Dependabot PR
+        run: gh pr review --approve "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+      - name: 🛬 Enable auto-merge for this Dependabot PR
+        # Auto-merge only for non-major updates
+        if: steps.metadata.outputs.update-type != 'version-update:semver-major'
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}

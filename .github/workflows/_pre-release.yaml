@@ -1,0 +1,43 @@
+name: Pre-Release
+
+on:
+  workflow_call:
+    inputs:
+      dist-cache-key:
+        type: string
+        required: true
+        description: 'Cache key for the dist directory'
+
+permissions:
+  id-token: write
+  contents: write
+  pages: write
+
+jobs:
+  pre-release:
+    name: 🚀 Create Pre-Release
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # Fetch full history for semantic versioning
+
+      - uses: ./.github/actions/setup-node-pnpm
+
+      - name: 💾 Restore dist directory
+        uses: actions/cache/restore@v5
+        with:
+          path: dist
+          key: ${{ inputs.dist-cache-key }}
+          fail-on-cache-miss: true
+
+      - name: 🔧 Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: 🚀 Create Pre-Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: pnpx semantic-release

@@ -1,0 +1,33 @@
+name: Quality Checks
+permissions:
+  contents: read
+
+on:
+  workflow_call:
+
+jobs:
+
+  linting:
+    uses: ./.github/workflows/_node_job.yaml
+    with:
+      name: 🧹  Linting
+      run: pnpm lint
+
+  typeCheck:
+    uses: ./.github/workflows/_node_job.yaml
+    with:
+      name: 🔍  Type Check
+      run: pnpm typecheck
+
+  unitTest:
+    uses: ./.github/workflows/_node_job.yaml
+    with:
+      name: 🧪  Unit Test
+      run: pnpm test
+      timeout-minutes: 15
+
+  unusedDependencies:
+    uses: ./.github/workflows/_node_job.yaml
+    with:
+      name: 📦  Unused Dependencies Check
+      run: pnpm dlx knip --include dependencies

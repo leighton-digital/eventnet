@@ -1,4 +1,4 @@
-const Ajv = require("ajv");
+const Ajv = require('ajv');
 const ajv = new Ajv({ strict: false });
 
 export interface TestResultOutput {
@@ -8,7 +8,7 @@ export interface TestResultOutput {
 
 export const testResult = (
   message: string,
-  pass: boolean
+  pass: boolean,
 ): TestResultOutput => ({
   message: () => message,
   pass,
@@ -20,7 +20,7 @@ export default {
       var validate = ajv.compile(theSchema);
       var valid = validate(theEvent.detail || theEvent.Detail);
       if (!valid) {
-        let warning: string = "Event";
+        let warning: string = 'Event';
         validate.errors.forEach((msg: any) => {
           warning = warning + ` ${msg.message}`;
         });

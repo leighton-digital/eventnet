@@ -1,23 +1,24 @@
-import { loadArg } from "../options/args";
-const { getDefaultRoleAssumerWithWebIdentity } = require("@aws-sdk/client-sts");
-const { defaultProvider } = require("@aws-sdk/credential-provider-node");
-const { fromIni } = require("@aws-sdk/credential-providers");
+import { loadArg } from '../options/args';
+
+const { getDefaultRoleAssumerWithWebIdentity } = require('@aws-sdk/client-sts');
+const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+const { fromIni } = require('@aws-sdk/credential-providers');
 
 export const stackName = loadArg({
-  cliArg: "stack",
-  processEnvName: "CFN_STACK_NAME",
+  cliArg: 'stack',
+  processEnvName: 'CFN_STACK_NAME',
 });
 
 export const region = loadArg({
-  cliArg: "region",
-  processEnvName: "AWS_REGION",
-  defaultValue: "eu-west-2",
+  cliArg: 'region',
+  processEnvName: 'AWS_REGION',
+  defaultValue: 'eu-west-2',
 });
 
 const profile = loadArg({
-  cliArg: "profile",
-  processEnvName: "PROFILE",
-  defaultValue: "NONE",
+  cliArg: 'profile',
+  processEnvName: 'PROFILE',
+  defaultValue: 'NONE',
 });
 
 let AWSConfigObject: any = {
@@ -28,7 +29,7 @@ let AWSConfigObject: any = {
   }),
 };
 
-if (profile !== "NONE") {
+if (profile !== 'NONE') {
   AWSConfigObject = {
     credentials: fromIni({
       profile,

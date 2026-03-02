@@ -1,9 +1,9 @@
-import { AWSConfig, stackName } from "../AWSConfig";
-import { SSMClient, GetParameterCommand } from "@aws-sdk/client-ssm";
 import {
   EventBridgeClient,
   PutEventsCommand,
 } from "@aws-sdk/client-eventbridge";
+import { GetParameterCommand, SSMClient } from "@aws-sdk/client-ssm";
+import { AWSConfig, stackName } from "../AWSConfig";
 
 const clientSSM = new SSMClient(AWSConfig);
 const clientEventBridge = new EventBridgeClient(AWSConfig);

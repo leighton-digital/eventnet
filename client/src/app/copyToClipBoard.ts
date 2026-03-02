@@ -1,3 +1,3 @@
-export const copyToClipBoard = function (event: any) {
+export const copyToClipBoard = (event: any) => {
   navigator.clipboard.writeText(JSON.stringify(event));
 };

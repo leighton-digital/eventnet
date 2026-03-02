@@ -102,7 +102,6 @@ dist
 
 # vuepress v2.x temp and cache directory
 .temp
-.cache
 
 # Docusaurus cache and generated files
 .docusaurus
@@ -129,7 +128,31 @@ dist
 .yarn/install-state.gz
 .pnp.*
 
-
 lib
 app
 cli
+
+# Build / pack output
+package
+
+# IDE
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# AWS credentials
+.aws/
+.aws-credentials
+
+# Test files
+__tests__/testData.ts
+
+# Typedoc
+docs/reference/
+
+**/.docusaurus/**/*
+**/build/**/*

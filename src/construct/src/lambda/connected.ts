@@ -1,7 +1,7 @@
-import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
-import { PutCommand, DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
+import { DynamoDBClient } from '@aws-sdk/client-dynamodb';
+import { DynamoDBDocumentClient, PutCommand } from '@aws-sdk/lib-dynamodb';
 
-import { APIGatewayProxyEvent } from "aws-lambda";
+import type { APIGatewayProxyEvent } from 'aws-lambda';
 
 const client = new DynamoDBClient({
   region: process.env.AWS_REGION,
@@ -13,7 +13,7 @@ export const main = async (event: APIGatewayProxyEvent) => {
   const tableName = process.env.TABLE_NAME;
 
   if (!tableName) {
-    throw new Error("tableName not specified in process.env.TABLE_NAME");
+    throw new Error('tableName not specified in process.env.TABLE_NAME');
   }
 
   const putItem = {
@@ -28,9 +28,9 @@ export const main = async (event: APIGatewayProxyEvent) => {
   } catch (err) {
     return {
       statusCode: 500,
-      body: "Failed to connect: " + JSON.stringify(err),
+      body: 'Failed to connect: ' + JSON.stringify(err),
     };
   }
 
-  return { statusCode: 200, body: "Connected." };
+  return { statusCode: 200, body: 'Connected.' };
 };

@@ -1,0 +1,36 @@
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        required: true
+      run:
+        type: string
+        required: true
+      timeout-minutes:
+        type: number
+        required: false
+        default: 10
+
+jobs:
+  node-job:
+    name: ${{inputs.name}}
+    permissions:
+      contents: read
+    runs-on: ubuntu-24.04
+    timeout-minutes: ${{inputs.timeout-minutes}}
+    env:
+      GITHUB_TOKEN: ${{ github.token }}
+    outputs:
+      cache-key: ${{ steps.compute-key.outputs.key }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+          token: ${{ github.token }}
+      - name: Configure Git
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: ${{ inputs.run }}

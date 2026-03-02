@@ -1,9 +1,9 @@
-import yargs from "yargs";
+import yargs from 'yargs';
 
 const argv = yargs(process.argv).argv as Record<string, unknown>;
 
 const isNonEmptyString = (arg: unknown): arg is string =>
-  typeof arg === "string" && arg !== "";
+  typeof arg === 'string' && arg !== '';
 
 export const loadArg = ({
   cliArg,
@@ -28,7 +28,7 @@ export const loadArg = ({
 
   if (defaultValue === undefined) {
     throw new Error(
-      `--${cliArg} CLI argument or ${processEnvName} env var required.`
+      `--${cliArg} CLI argument or ${processEnvName} env var required.`,
     );
   }
 

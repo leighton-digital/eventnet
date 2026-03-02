@@ -1,0 +1,86 @@
+name: "Release Publication"
+
+on:
+  release:
+    types: [released] # Triggers when a pre-release is converted to a release
+
+permissions:
+  id-token: write
+  contents: write
+  packages: write
+  pages: write
+
+jobs:
+  publish:
+    name: 🚀 Publish to NPM
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment: prod
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.release.tag_name }}
+
+      - uses: ./.github/actions/setup-node-pnpm
+      - run: npm -v && node -v && npm i -g npm@latest
+      - name: 🔧 Verify Release Tag
+        run: |
+          TAG_NAME="${{ github.event.release.tag_name }}"
+          if [[ "$TAG_NAME" == *"-pre" ]]; then
+            echo "❌ This appears to be a pre-release tag ($TAG_NAME). This workflow should only run on full releases."
+            exit 1
+          fi
+          echo "✅ Publishing release for tag: $TAG_NAME"
+
+      - name: 📦 Build Package
+        run: pnpm run build
+
+      - name: 📚 Build Documentation
+        run: |
+          pnpm run docs:ref
+          pnpm run docs:post
+          pnpm run docs:build
+
+      - name: 📦 Create Package Tarball
+        run: |
+          # Extract version from tag (remove 'v' prefix if present)
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+
+          echo "Creating package tarball for version: $VERSION"
+
+          # Create the package tarball
+          pnpm pack
+
+      - name: 🚀 Publish to NPM
+        run: |
+          # Extract version from tag (remove 'v' prefix if present)
+          VERSION="${{ github.event.release.tag_name }}"
+          VERSION="${VERSION#v}"
+
+          echo "Publishing version: $VERSION"
+
+          # Find the packed tarball
+          TARBALL=$(ls leighton-digital-eventnet-*.tgz | head -1)
+          echo "Publishing tarball: $TARBALL"
+
+          # Publish the tarball to NPM using OIDC authentication
+          npm publish "$TARBALL" --access public --provenance
+
+      - name: ✅ Publication Success
+        run: |
+          echo "🎉 Successfully published ${{ github.event.release.tag_name }} to NPM!"
+          echo "📦 Package: @leighton-digital/eventnet"
+          echo "🔗 NPM: https://www.npmjs.com/package/@leighton-digital/eventnet"
+
+      - name: 📝 Add CNAME file
+        run: echo "eventnet.leighton.dev" > docs-site/build/CNAME
+
+      - name: 📤 Upload Pages artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: docs-site/build
+
+      - name: 📄 Deploy Documentation
+        uses: actions/deploy-pages@v4
+        id: deployment
